@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Reminder Call</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="add_alarm_times_or_places_you_want_to_remind_specific_people_when_you_re_nearby">Add alarm times or places you want to remind specific people when you\'re nearby</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="enter_phone_number"><font size="14"> Enter phone number</font></string>
+</resources>

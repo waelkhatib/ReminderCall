@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:TagsEditText="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="8dp">
+        <TextView
+            android:text="21:12"
+            android:id="@+id/timeVal"
+            android:layout_gravity="center_vertical"
+            android:layout_width="0dp"
+            android:layout_weight="0.75"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.25"/>
+
+        <EditText
+            android:id="@+id/spinner"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="Select contact..."
+            style="@style/SpinnerTheme"
+            android:layout_height="32dp"
+            />
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+
+            android:id="@+id/popup_menu"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_more"/>
+
+    </LinearLayout>
+    <View
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="match_parent"
+
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+</LinearLayout>

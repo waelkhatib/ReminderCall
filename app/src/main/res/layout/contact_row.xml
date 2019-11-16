@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:TagsEditText="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginBottom="8dp">
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/chkbox"
+            android:layout_width="wrap_content"
+            android:buttonTint="@drawable/checkbox"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="21:12"
+            android:id="@+id/contactVal"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</LinearLayout>
