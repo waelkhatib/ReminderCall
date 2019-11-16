@@ -1,26 +1,21 @@
 package com.waelalk.remindercall.View;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 
 import com.waelalk.remindercall.External.RingTonePlayer;
 import com.waelalk.remindercall.External.RingtonePickerDialog;
@@ -28,8 +23,6 @@ import com.waelalk.remindercall.External.RingtonePickerListener;
 import com.waelalk.remindercall.R;
 
 import java.io.IOException;
-
-import afu.org.checkerframework.checker.nullness.qual.NonNull;
 
 public class ConfigurationActivity extends AppCompatActivity {
 

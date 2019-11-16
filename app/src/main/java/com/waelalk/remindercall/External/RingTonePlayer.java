@@ -3,7 +3,7 @@ package com.waelalk.remindercall.External;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 

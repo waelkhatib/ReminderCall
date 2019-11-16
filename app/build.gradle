@@ -3,6 +3,10 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.waelalk.remindercall"
         minSdkVersion 19
@@ -11,7 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
         javaCompileOptions.annotationProcessorOptions.includeCompileClasspath true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -23,25 +27,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+   // implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
 
-    implementation 'com.android.support:design:28.0.0-alpha1'
-    implementation 'com.android.support:cardview-v7:28.0.0-alpha1'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
-    implementation "android.arch.core:runtime:1.1.1"
-    implementation "android.arch.core:common:1.1.1"
+    //implementation 'com.google.android.material:material:1.2.0-alpha01'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0-rc01'
+    //implementation "androidx.arch.core:core-runtime:2.1.0"
+    //implementation "androidx.arch.core:core-common:2.1.0"
     implementation 'com.github.Kunzisoft:Android-SwitchDateTimePicker:2.0'
     implementation 'com.codesgood:justifiedtextview:1.1.0'
     //implementation 'com.google.android.gms:play-services:12.0.1'
-    implementation("com.google.android.libraries.places:places-compat:1.0.0")
+    //implementation("com.google.android.libraries.places:places-compat:1.0.0")
 
-    implementation("com.schibstedspain.android:leku:5.0.0") {
-        exclude group: 'com.google.android.gms'
-        exclude module: "play-services-places"
-    }
+
     implementation 'com.github.mirrajabi:search-dialog:1.2.4'
     implementation 'com.github.vihtarb:tooltip:0.2.0'
+    implementation 'com.google.android.libraries.places:places:2.1.0'
+    // PING Place Picker
+    implementation 'com.github.rtchagas:pingplacepicker:1.1.+'
 
     // implementation 'com.kevalpatel2106:ringtonepicker:1.1'
     /*testImplementation 'junit:junit:4.12'

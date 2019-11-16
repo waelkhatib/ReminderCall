@@ -4,26 +4,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.view.Gravity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 import com.waelalk.remindercall.View.ContactSearchDialogCompat;
 import com.waelalk.remindercall.View.ContactsActivity;
-import com.waelalk.remindercall.View.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

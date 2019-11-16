@@ -1,23 +1,22 @@
 package com.waelalk.remindercall.Adapter;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-//import com.google.android.gms.location.places.ui.PlacePicker;
-import com.schibstedspain.leku.LocationPickerActivity;
 import com.waelalk.remindercall.R;
 import com.waelalk.remindercall.View.TimesActivity;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+//import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleViewAdapter.ViewHolder> {
 
@@ -70,10 +69,13 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
         holder.addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              Intent locationPickerIntent =new LocationPickerActivity.Builder()
+              /*Intent locationPickerIntent =new LocationPickerActivity.Builder()
+                      .withGeolocApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
+                      .withSearchZone("es_ES")
+                      .withGooglePlacesEnabled()
+                      .build(context);*/
                       //  .withLocation(41.4036299, 2.1743558)
-                        .withGeolocApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
-                        .withSearchZone("es_ES")
+
                         //.withSearchZone(new SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
 
                        /* .shouldReturnOkOnBackPressed()
@@ -82,14 +84,14 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
                         .withZipCodeHidden()
 
                         .withSatelliteViewHidden()*/
-                        .withGooglePlacesEnabled()
+
                 //        .withGoogleTimeZoneEnabled()
               //          .withVoiceSearchHidden()
               //          .withUnnamedRoadHidden()
-                        .build(context);
-                locationPickerIntent.putExtra(LocationPickerActivity.LOCATION_SERVICE, true);
+                ((TimesActivity)context).checkPermissions();
+                /*locationPickerIntent.putExtra(LocationPickerActivity.LOCATION_SERVICE, true);
 
-                ((Activity) context).startActivityForResult(locationPickerIntent, TimesActivity.PLACE_PICKER_REQUEST);
+                ((Activity) context).startActivityForResult(locationPickerIntent, TimesActivity.PLACE_PICKER_REQUEST);*/
   /*              PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
                 try {
                     ((Activity) context). startActivityForResult(builder.build(((Activity) context)), TimesActivity.PLACE_PICKER_REQUEST);
