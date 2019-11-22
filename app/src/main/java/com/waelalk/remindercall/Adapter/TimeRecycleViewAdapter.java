@@ -54,6 +54,8 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                getData().remove(position);
+                                notifyDataSetChanged();
                                 // Continue with delete operation
                             }
                         })
@@ -130,4 +132,7 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
         return mData.get(id);
     }
 
+    public List<String> getData() {
+        return mData;
+    }
 }

@@ -105,11 +105,11 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
     }
     private void initViews() {
         ArrayList<String> times = new ArrayList<>();
-        times.add("12:34");
+        /*times.add("12:34");
         times.add("03:56");
         times.add("14-06-2019 11:05");
         times.add("16-11-2019 10:00");
-        times.add("14:20");
+        times.add("14:20");*/
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.timeRecyclerView);
@@ -160,7 +160,8 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                     mTimePicker = new TimePickerDialog(TimesActivity.this, R.style.MyTimePickerDialogStyle, new TimePickerDialog.OnTimeSetListener() {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-
+                             adapter.getData().add(""+selectedHour+":"+selectedMinute);
+                             adapter.notifyDataSetChanged();
                         }
                     }, hour, minute, true);//Yes 24 hour time
                     mTimePicker.setTitle("");
@@ -195,6 +196,9 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                     dateTimeDialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
                         @Override
                         public void onPositiveButtonClick(Date date) {
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            adapter.getData().add(format.format(date));
+                            adapter.notifyDataSetChanged();
                             // Date is get on positive button click
                             // Do something
                         }

@@ -44,8 +44,8 @@ dependencies {
     implementation 'com.github.mirrajabi:search-dialog:1.2.4'
     implementation 'com.github.vihtarb:tooltip:0.2.0'
     implementation 'com.google.android.libraries.places:places:2.1.0'
-    // PING Place Picker
-    implementation 'com.github.rtchagas:pingplacepicker:1.1.+'
+    // PING Place Picke
+    implementation 'com.github.rtchagas:pingplacepicker:1.1.5'
 
     // implementation 'com.kevalpatel2106:ringtonepicker:1.1'
     /*testImplementation 'junit:junit:4.12'
