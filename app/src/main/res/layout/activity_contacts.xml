@@ -11,7 +11,7 @@
     android:orientation="vertical"
     tools:context=".View.ContactsActivity">
     <com.codesgood.views.JustifiedTextView
-        android:text="@string/add_alarm_times_or_places_you_want_to_remind_specific_people_when_you_re_nearby"
+        android:text="Provide contact list for each appointment with the possibility to set message text for it."
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <androidx.cardview.widget.CardView
