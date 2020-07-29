@@ -3,9 +3,12 @@ package com.waelalk.remindercall.Adapter;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -15,7 +18,9 @@ import com.tooltip.Tooltip;
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.SearchResultListener;
@@ -26,6 +31,7 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
     private static final int LAYOUT_ADD = 1;
     private static final int LAYOUT_VIEW = 2;
     private List<T> mData;
+    private List<String> selected_contact=new ArrayList<>();
     private LayoutInflater mInflater;
     private Context context;
     private SearchResultListener mSearchResultListener;
@@ -100,11 +106,23 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
             });
         }else {
             ((ViewHolderShow)holder).textView.setText(((Contact_Info)mData.get(position)).getName());
+            ((ViewHolderShow)holder).checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked){
+                        selected_contact.add(((Contact_Info)mData.get(position)).getName());
+                    }else {
+                        selected_contact.remove(((Contact_Info)mData.get(position)).getName());
+                    }
+                }
+            });
 
         }
     }
 
-
+    public String getSelectedItems(){
+        return TextUtils.join(",",selected_contact);
+    }
     // total number of rows
     @Override
     public int getItemCount() {

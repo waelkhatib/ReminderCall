@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
@@ -169,7 +170,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         //holder.spinner.setFocusedByDefault(false);
         holder.spinner.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
 //                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
                 ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<>(context, "Search...",
                         "What are you looking for...?", null, createSampleContacts(),new SearchResultListener<Contact_Info>() {
@@ -183,6 +184,13 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 });
 
                 dialog.show();
+                dialog.getPositiveButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((EditText)view).setText (((ContactModelAdapter)(dialog.getAdapter())).getSelectedItems());
+                        dialog.dismiss();
+                    }
+                });
             }
         });
     }

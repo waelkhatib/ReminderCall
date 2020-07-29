@@ -143,7 +143,9 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(TimesActivity.this,ContactsActivity.class));
+                Intent intent=new Intent(TimesActivity.this,ContactsActivity.class);
+                intent.putStringArrayListExtra("times",(ArrayList<String>) adapter.getData());
+                startActivity(intent);
             }
         });
         final Switch switch1 = findViewById(R.id.is_periodic);

@@ -26,6 +26,12 @@ public class ContactSearchDialogCompat<T extends Searchable> extends BaseSearchD
     private SearchResultListener<T> mSearchResultListener;
     private Context mContext;
 
+    public View getPositiveButton() {
+        return positiveButton;
+    }
+
+    private View positiveButton;
+
     public ContactSearchDialogCompat(
             Context context, String title, String searchHint,
             @Nullable Filter filter, ArrayList<T> items,
@@ -62,12 +68,13 @@ public class ContactSearchDialogCompat<T extends Searchable> extends BaseSearchD
                         dismiss();
                     }
                 });*/
-       view.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               Toast.makeText(mContext,"Ok",Toast.LENGTH_SHORT).show();
-           }
-       });
+       positiveButton=view.findViewById(R.id.ok);
+//       view.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
+//           @Override
+//           public void onClick(View v) {
+//               Toast.makeText(mContext,"Ok",Toast.LENGTH_SHORT).show();
+//           }
+//       });
         view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

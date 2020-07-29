@@ -21,6 +21,7 @@ import com.waelalk.remindercall.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -55,12 +56,8 @@ public class ContactsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void initViews() {
-        ArrayList<String> times =new ArrayList<>();
-        times.add("12:34");
-        times.add("03:56");
-        times.add("14-06-2019 11:05");
-        times.add("16-11-2019 10:00");
-        times.add("14:20");
+        List<String> times =getIntent().getStringArrayListExtra("times");
+
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.contactRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
