@@ -33,7 +33,11 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.libraries.places.api.model.Place;
 import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
-import com.rtchagas.pingplacepicker.PingPlacePicker;
+//import com.rtchagas.pingplacepicker.PingPlacePicker;
+import com.sucho.placepicker.AddressData;
+import com.sucho.placepicker.Constants;
+import com.sucho.placepicker.MapType;
+import com.sucho.placepicker.PlacePicker;
 import com.waelalk.remindercall.Adapter.TimeRecycleViewAdapter;
 import com.waelalk.remindercall.R;
 
@@ -52,6 +56,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static com.sucho.placepicker.Constants.GOOGLE_API_KEY;
 
 public class TimesActivity extends AppCompatActivity  implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -234,7 +240,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                         break;
                 }
                 break;
-            case  PLACE_PICKER_REQUEST:
+            case  Constants.PLACE_PICKER_REQUEST:
 /*
 
                 if (resultCode == Activity.RESULT_OK && data != null) {
@@ -273,9 +279,8 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                         Log.d("LekuPoi****", lekuPoi.toString())
             */
               if(resultCode == Activity.RESULT_OK){
-                  Place place = PingPlacePicker.getPlace(data);
-                  if (place != null) {
-                      Toast.makeText(this, "You selected the place: " + place.getName(), Toast.LENGTH_SHORT).show();
+                  if (resultCode == Activity.RESULT_OK && data != null) {
+                      AddressData addressData = data.getParcelableExtra(Constants.ADDRESS_INTENT);
                   }
               }else
                 if (resultCode == Activity.RESULT_CANCELED) {
@@ -361,9 +366,25 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                                     .this,
                                                     Manifest.permission.ACCESS_FINE_LOCATION);
                                     if (permissionLocation == PackageManager.PERMISSION_GRANTED) {
-                                        PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
-                                        builder.setAndroidApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
-                                                .setMapsApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk");
+                                   //     PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
+                                     //   builder.setAndroidApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
+                                       //         .setMapsApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk");
+                                        PlacePicker.IntentBuilder builder=new PlacePicker.IntentBuilder()
+                                                .setLatLong(33.5138, 36.2765)  // Initial Latitude and Longitude the Map will load into
+                                                .showLatLong(true)  // Show Coordinates in the Activity
+                                                .setMapZoom(12.0f)  // Map Zoom Level. Default: 14.0
+                                                .setAddressRequired(false) // Set If return only Coordinates if cannot fetch Address for the coordinates. Default: True
+                                                .hideMarkerShadow(true) // Hides the shadow under the map marker. Default: False
+                                                //.setMarkerDrawable(R.drawable.marker) // Change the default Marker Image
+                                                .setMarkerImageImageColor(R.color.colorPrimary)
+                                        //        .setFabColor(R.color.fabColor)
+                                          //      .setPrimaryTextColor(R.color.primaryTextColor) // Change text color of Shortened Address
+                                            //    .setSecondaryTextColor(R.color.secondaryTextColor) // Change text color of full Address
+                                              //  .setBottomViewColor(R.color.bottomViewColor) // Change Address View Background Color (Default: White)
+                                                //.setMapRawResourceStyle(R.raw.map_style)  //Set Map Style (https://mapstyle.withgoogle.com/)
+                                                .setMapType(MapType.NORMAL)
+                                                //.setPlaceSearchBar(true, "AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk") //Activate GooglePlace Search Bar. Default is false/not activated. SearchBar is a chargeable feature by Google
+                                                .onlyCoordinates(false);  //Get only Coordinates from Place Picker
 
                                         // If you want to set a initial location rather then the current device location.
                                         // NOTE: enable_nearby_search MUST be true.
@@ -371,7 +392,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
 
                                         try {
                                             Intent placeIntent = builder.build(TimesActivity.this);
-                                            startActivityForResult(placeIntent, PLACE_PICKER_REQUEST);
+                                            startActivityForResult(placeIntent,Constants.PLACE_PICKER_REQUEST);
                                         }
                                         catch (Exception ex) {
                                             // Google Play services is not available...

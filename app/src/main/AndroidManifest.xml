@@ -74,6 +74,10 @@
             android:name=".View.ContactsActivity"
             android:label="Contacts" >
         </activity>
+
+        <activity
+            android:name="com.sucho.placepicker.PlacePickerActivity"
+            android:theme="@style/PlacePickerTheme"/>
         <activity
             android:name=".View.ConfigurationActivity"
             android:label="Configuration" >
