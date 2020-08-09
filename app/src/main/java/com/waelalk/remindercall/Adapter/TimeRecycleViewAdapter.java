@@ -47,8 +47,8 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(context).setTitle("Delete Time")
-                        .setMessage("Are you sure you want to delete this Time?")
+                AlertDialog dialog=  new AlertDialog.Builder(context).setTitle(R.string.delete_time)
+                        .setMessage(R.string.delete_time_question)
 
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.

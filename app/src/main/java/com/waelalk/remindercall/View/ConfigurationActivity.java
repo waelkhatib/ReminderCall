@@ -48,7 +48,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
                         //Set title of the dialog.
                         //If set null, no title will be displayed.
-                        .setTitle("Select ringtone")
+                        .setTitle(getString(R.string.select_ringtone))
 
                         //set the currently selected uri, to mark that ringtone as checked by default.
                         //If no ringtone is currently selected, pass null.
@@ -62,11 +62,11 @@ public class ConfigurationActivity extends AppCompatActivity {
 
                         //set the text to display of the positive (ok) button.
                         //If not set OK will be the default text.
-                        .setPositiveButtonText("SET RINGTONE")
+                        .setPositiveButtonText(getString(android.R.string.yes))
 
                         //set text to display as negative button.
                         //If set null, negative button will not be displayed.
-                        .setCancelButtonText("CANCEL")
+                        .setCancelButtonText(getString(android.R.string.no))
 
                         //Set flag true if you want to play the sample of the clicked tone.
                         .setPlaySampleWhileSelection(true)
@@ -100,8 +100,8 @@ public class ConfigurationActivity extends AppCompatActivity {
         reset_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(ConfigurationActivity.this).setTitle("Change settings")
-                        .setMessage("Are you sure you want to return to default settings?")
+                AlertDialog dialog=  new AlertDialog.Builder(ConfigurationActivity.this).setTitle(R.string.save_chnge_lbl)
+                        .setMessage(R.string.save_chnge_question)
 
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.

@@ -11,7 +11,10 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.R;
+
+import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity {
     private static int SPLASH_SCREEN_TIME_OUT=2000;
@@ -32,9 +35,11 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAnimationStart(Animation animation) {
                 Animation slide = null;
+
                 DisplayMetrics displayMetrics = new DisplayMetrics();
                 getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                slide = new TranslateAnimation(displayMetrics.widthPixels/2-textView.getWidth()/2,displayMetrics.widthPixels/2-textView.getWidth()/2,displayMetrics.heightPixels-5,displayMetrics.heightPixels/2+35+imageView.getHeight()/2);
+
+                slide = new TranslateAnimation((displayMetrics.widthPixels/2-textView.getWidth()/2)*Application.getDisplayFactor(),(displayMetrics.widthPixels/2-textView.getWidth()/2)*Application.getDisplayFactor(),displayMetrics.heightPixels-5,displayMetrics.heightPixels/2+35+imageView.getHeight()/2);
 
                 slide.setDuration(2000);
                 slide.setFillAfter(true);

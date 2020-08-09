@@ -91,11 +91,11 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
                             .setTextColor(context.getResources().getColor(android.R.color.white));
 
                     if(text.trim().equals("")){
-                        tooltip.setText("Phone number could not be empty")
+                        tooltip.setText(context.getString(R.string.phone_not_empty))
                                 .show();
                       }else
                         if(mData.contains(new Contact_Info(text,text,false))){
-                            tooltip.setText("Phone number should not be duplicated")
+                            tooltip.setText(context.getString(R.string.phone_not_duplicated))
                                     .show();
                         }else {
                             mData.add(1,(T)new Contact_Info(text,text,false));

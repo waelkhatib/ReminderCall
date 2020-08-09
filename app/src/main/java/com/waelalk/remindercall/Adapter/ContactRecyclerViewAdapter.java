@@ -16,6 +16,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 import com.waelalk.remindercall.View.ContactSearchDialogCompat;
@@ -64,8 +65,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 @Override
                 public void onClick(View v) {
                     mDropdown.dismiss();
-                    AlertDialog dialog=  new AlertDialog.Builder(context).setTitle("Reset contact list")
-                            .setMessage("Are you sure you want to reset contact list for this time?")
+                    AlertDialog dialog=  new AlertDialog.Builder(context).setTitle(R.string.reset_contact_list)
+                            .setMessage(R.string.reset_contact_list_question)
 
                             // Specifying a listener allows you to take an action before dismissing the dialog.
                             // The dialog is automatically dismissed when a dialog button is clicked.
@@ -99,12 +100,12 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                     .setView(viewInflated)
 
 // Set up the buttons
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                     //        m_Text = input.getText().toString();
                         }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
@@ -123,7 +124,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
             Drawable background = context.getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
             mDropdown.setBackgroundDrawable(background);
-            mDropdown.showAsDropDown(pop, 5, 5);
+            mDropdown.showAsDropDown(pop, -20, 5);
             return mDropdown;
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,8 +173,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             @Override
             public void onClick(View view) {
 //                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
-                ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<>(context, "Search...",
-                        "What are you looking for...?", null, createSampleContacts(),new SearchResultListener<Contact_Info>() {
+                ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<>(context, context.getString(R.string.search),
+                        context.getString(R.string.what_look_for), null, createSampleContacts(),new SearchResultListener<Contact_Info>() {
                     @Override
                     public void onSelected(
                             BaseSearchDialogCompat dialog,

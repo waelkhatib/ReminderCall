@@ -67,8 +67,8 @@ public class ContactsActivity extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(ContactsActivity.this).setTitle("Save changes")
-                        .setMessage("Are you sure you want to save these changes?")
+                AlertDialog dialog=  new AlertDialog.Builder(ContactsActivity.this).setTitle(R.string.save_chnge_lbl)
+                        .setMessage(R.string.save_chnge_question)
 
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.

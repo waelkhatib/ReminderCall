@@ -74,13 +74,13 @@
 
                         <TextView
                             android:textColor="@android:color/black"
-                            android:text="Times"
+                            android:text="@string/phse_1"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <com.codesgood.views.JustifiedTextView
                             android:gravity="center_horizontal"
-                            android:text="Fill out appointment list with the possibility to make each appointment periodic and link it to a specific location"
+                            android:text="@string/expln_phse_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
@@ -167,13 +167,13 @@
 
                         <TextView
                             android:textColor="@color/colorGray"
-                            android:text="Contacts"
+                            android:text="@string/phse_2"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <TextView
                             android:gravity="center_horizontal"
-                            android:text="Provide contact list for each appointment with the possibility to set message text for it"
+                            android:text="@string/expln_phse_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>
@@ -259,13 +259,13 @@
 
                         <TextView
                             android:textColor="@color/colorGray"
-                            android:text="Adjust settings"
+                            android:text="@string/phse_3"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <com.codesgood.views.JustifiedTextView
                             android:gravity="center_horizontal"
-                            android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,"
+                            android:text="@string/expln_phse_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                     </LinearLayout>

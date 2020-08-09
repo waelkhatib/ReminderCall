@@ -9,19 +9,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18dp"
-        android:text="Reminder message"
+        android:text="@string/reminder_message"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
    <TextView
-       android:text="Enter the message which you want to be sent"
+       android:text="@string/enter_the_message_which_you_want_to_be_sent"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:textSize="16dp"
        android:layout_marginBottom="8dp"/>
     <EditText
         android:background="@drawable/borders"
-        android:hint="Enter message..."
+        android:hint="@string/enter_message"
         android:inputType="textMultiLine"
         android:lines="3"
         android:padding="8dp"

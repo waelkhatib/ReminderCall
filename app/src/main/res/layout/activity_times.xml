@@ -11,7 +11,7 @@
     android:orientation="vertical"
     tools:context=".View.TimesActivity">
 <com.codesgood.views.JustifiedTextView
-    android:text="Fill out appointment list with the possibility to make each appointment periodic and link it to a specific location."
+    android:text="@string/expln_phse_1"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
     <androidx.cardview.widget.CardView
@@ -47,24 +47,25 @@
                 android:layout_marginRight="4dp"
                 android:id="@+id/addTime"
                 android:background="@android:color/transparent"
-                android:src="@drawable/ic_alarm"/>
+                android:src="@drawable/calendar"/>
             <TextView
-                android:text="Add time"
+                android:text="@string/add_time"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
             <View
                 android:layout_width="16dp"
                 android:layout_height="1dp"/>
-            <Switch
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 android:layout_marginEnd="4dp"
-                android:id="@+id/is_periodic"
-                android:layout_marginRight="4dp"/>
+                android:layout_marginRight="4dp"
+                android:id="@+id/addPeriodicTime"
+                android:background="@android:color/transparent"
+                android:src="@drawable/period"/>
             <TextView
-                android:text="Periodic"
+                android:text="@string/periodic"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
@@ -90,7 +91,7 @@
             android:layout_marginEnd="8dp"
 
             android:textAllCaps="false"
-            android:text="Save"/>
+            android:text="@string/save"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="30dp"
@@ -103,7 +104,7 @@
             android:layout_marginStart="8dp"
             android:textAllCaps="false"
 
-            android:text="Next"/>
+            android:text="@string/_next"/>
 
     </LinearLayout>
     <RelativeLayout

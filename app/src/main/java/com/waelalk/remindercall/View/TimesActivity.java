@@ -39,6 +39,7 @@ import com.sucho.placepicker.Constants;
 import com.sucho.placepicker.MapType;
 import com.sucho.placepicker.PlacePicker;
 import com.waelalk.remindercall.Adapter.TimeRecycleViewAdapter;
+import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.R;
 
 import java.text.SimpleDateFormat;
@@ -126,8 +127,8 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(TimesActivity.this).setTitle("Save changes")
-                        .setMessage("Are you sure you want to save these changes?")
+                AlertDialog dialog=  new AlertDialog.Builder(TimesActivity.this).setTitle(R.string.save_chnge_lbl)
+                        .setMessage(R.string.save_chnge_question)
 
                         // Specifying a listener allows you to take an action before dismissing the dialog.
                         // The dialog is automatically dismissed when a dialog button is clicked.
@@ -154,54 +155,13 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                 startActivity(intent);
             }
         });
-        final Switch switch1 = findViewById(R.id.is_periodic);
+
         ImageButton imageButton = findViewById(R.id.addTime);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar mcurrentTime = Calendar.getInstance();
-                if (switch1.isChecked()) {
-
-                    int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                    int minute = mcurrentTime.get(Calendar.MINUTE);
-                    TimePickerDialog mTimePicker;
-                    mTimePicker = new TimePickerDialog(TimesActivity.this, R.style.MyTimePickerDialogStyle, new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                             adapter.getData().add(""+selectedHour+":"+selectedMinute);
-                             adapter.notifyDataSetChanged();
-                        }
-                    }, hour, minute, true);//Yes 24 hour time
-                    mTimePicker.setTitle("");
-                    mTimePicker.show();
-                    mTimePicker.getButton(TimePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-                    mTimePicker.getButton(TimePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-
-                } else {
-
-
-                    SwitchDateTimeDialogFragment dateTimeDialogFragment = SwitchDateTimeDialogFragment.newInstance(
-                            "",
-                            "OK",
-                            "Cancel"
-                    );
-
-// Assign values
-                    dateTimeDialogFragment.startAtCalendarView();
-                    dateTimeDialogFragment.set24HoursMode(true);
-                    dateTimeDialogFragment.setMinimumDateTime(new GregorianCalendar(mcurrentTime.get(Calendar.YEAR), mcurrentTime.get(Calendar.MONTH), mcurrentTime.get(Calendar.DAY_OF_MONTH)).getTime());
-                    dateTimeDialogFragment.setMaximumDateTime(new GregorianCalendar(2025, Calendar.DECEMBER, 31).getTime());
-                    dateTimeDialogFragment.setDefaultDateTime(new GregorianCalendar(mcurrentTime.get(Calendar.YEAR), mcurrentTime.get(Calendar.MONTH), mcurrentTime.get(Calendar.DAY_OF_MONTH), mcurrentTime.get(Calendar.HOUR_OF_DAY), mcurrentTime.get(Calendar.MINUTE)).getTime());
-
-// Define new day and month format
-                    try {
-                        dateTimeDialogFragment.setSimpleDateMonthAndDayFormat(new SimpleDateFormat("dd MMMM", Locale.getDefault()));
-                    } catch (SwitchDateTimeDialogFragment.SimpleDateMonthAndDayFormatException e) {
-                        Log.e("", e.getMessage());
-                    }
-
-// Set listener
-                    dateTimeDialogFragment.setOnButtonClickListener(new SwitchDateTimeDialogFragment.OnButtonClickListener() {
+                Application.showSwitchDateTimeDialogFragment(TimesActivity.this,TimesActivity.this,mcurrentTime,new SwitchDateTimeDialogFragment.OnButtonClickListener() {
                         @Override
                         public void onPositiveButtonClick(Date date) {
                             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -217,11 +177,27 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                         }
                     });
 
-// Show
-                    dateTimeDialogFragment.show(getSupportFragmentManager(), "dialog_time");
+
+            }
+        });
+        imageButton = findViewById(R.id.addPeriodicTime);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar mcurrentTime = Calendar.getInstance();
 
 
-                }
+
+                    Application.showTimePickerDialog(TimesActivity.this,mcurrentTime,new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                            adapter.getData().add(""+selectedHour+":"+selectedMinute);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
+
+
             }
         });
     }
