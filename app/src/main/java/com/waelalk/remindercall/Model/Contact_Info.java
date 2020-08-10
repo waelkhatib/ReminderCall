@@ -5,12 +5,11 @@ import ir.mirrajabi.searchdialog.core.Searchable;
 public class Contact_Info implements Searchable {
     private String name;
     private String phoneNo;
-    private boolean status;
 
-    public Contact_Info(String name, String phoneNo, boolean status) {
+    public Contact_Info(String name, String phoneNo) {
         this.name = name;
         this.phoneNo = phoneNo;
-        this.status = status;
+
     }
 
     public String getName() {
@@ -29,13 +28,6 @@ public class Contact_Info implements Searchable {
         this.phoneNo = phoneNo;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
 
     @Override
     public String getTitle() {

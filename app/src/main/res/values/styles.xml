@@ -8,7 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
-
+     <style name="PlacePickerStyle" parent="@style/PlacePickerTheme">
+         <item name="android:layoutDirection">ltr</item>
+     </style>
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/edittext_bg</item>
     </style>

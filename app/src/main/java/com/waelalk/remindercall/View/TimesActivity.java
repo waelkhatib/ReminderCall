@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -160,13 +161,15 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setClickable(false);
                 Calendar mcurrentTime = Calendar.getInstance();
                 Application.showSwitchDateTimeDialogFragment(TimesActivity.this,TimesActivity.this,mcurrentTime,new SwitchDateTimeDialogFragment.OnButtonClickListener() {
                         @Override
                         public void onPositiveButtonClick(Date date) {
-                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.ENGLISH);
                             adapter.getData().add(format.format(date));
                             adapter.notifyDataSetChanged();
+                            v.setClickable(true);
                             // Date is get on positive button click
                             // Do something
                         }
@@ -174,6 +177,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                         @Override
                         public void onNegativeButtonClick(Date date) {
                             // Date is get on negative button click
+                            v.setClickable(true);
                         }
                     });
 
@@ -184,17 +188,17 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                v.setClickable(false);
                 Calendar mcurrentTime = Calendar.getInstance();
+                Application.showTimePickerDialog(TimesActivity.this, mcurrentTime, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        v.setClickable(true);
+                        adapter.getData().add("" + selectedHour + ":" + selectedMinute);
+                        adapter.notifyDataSetChanged();
+                    }
 
-
-
-                    Application.showTimePickerDialog(TimesActivity.this,mcurrentTime,new TimePickerDialog.OnTimeSetListener() {
-                        @Override
-                        public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                            adapter.getData().add(""+selectedHour+":"+selectedMinute);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
+                }, v);
 
 
 
@@ -351,6 +355,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                                                 .setMapZoom(12.0f)  // Map Zoom Level. Default: 14.0
                                                 .setAddressRequired(false) // Set If return only Coordinates if cannot fetch Address for the coordinates. Default: True
                                                 .hideMarkerShadow(true) // Hides the shadow under the map marker. Default: False
+
                                                 //.setMarkerDrawable(R.drawable.marker) // Change the default Marker Image
                                                 .setMarkerImageImageColor(R.color.colorPrimary)
                                         //        .setFabColor(R.color.fabColor)

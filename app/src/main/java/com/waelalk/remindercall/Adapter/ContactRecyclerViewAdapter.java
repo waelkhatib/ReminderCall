@@ -1,11 +1,14 @@
 package com.waelalk.remindercall.Adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -124,7 +127,10 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
             Drawable background = context.getResources().getDrawable(android.R.drawable.editbox_dropdown_light_frame);
             mDropdown.setBackgroundDrawable(background);
-            mDropdown.showAsDropDown(pop, -20, 5);
+            int[] a = new int[2]; //getLocationInWindow required array of size 2
+            pop.getLocationInWindow(a);
+            mDropdown.showAtLocation(((Activity) context).getWindow().getDecorView(), Gravity.NO_GRAVITY, a[0]+pop.getWidth()/2-(Application.getDisplayFactor()>0?layout.getMeasuredWidth():0) , a[1]+pop.getHeight());
+            mDropdown.update();
             return mDropdown;
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,9 +204,9 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
     private ArrayList<Contact_Info> createSampleContacts() {
         ArrayList<Contact_Info> contact_infos=new ArrayList<>();
-        contact_infos.add(new Contact_Info("","",false));
+        contact_infos.add(new Contact_Info("",""));
         for(Map.Entry<String,String> entry : ((ContactsActivity)context).getContactList().entrySet()){
-            contact_infos.add(new Contact_Info(entry.getKey(),entry.getValue(),false));
+            contact_infos.add(new Contact_Info(entry.getKey(),entry.getValue()));
         }
         return contact_infos;
     }

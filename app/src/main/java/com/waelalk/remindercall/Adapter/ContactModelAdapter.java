@@ -94,11 +94,11 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
                         tooltip.setText(context.getString(R.string.phone_not_empty))
                                 .show();
                       }else
-                        if(mData.contains(new Contact_Info(text,text,false))){
+                        if(mData.contains(new Contact_Info(text,text))){
                             tooltip.setText(context.getString(R.string.phone_not_duplicated))
                                     .show();
                         }else {
-                            mData.add(1,(T)new Contact_Info(text,text,false));
+                            mData.add(1,(T)new Contact_Info(text,text));
                             ((ViewHolderAdd)holder).cont_val.setText("");
                             notifyDataSetChanged();
                         }

@@ -78,7 +78,7 @@
 
         <activity
             android:name="com.sucho.placepicker.PlacePickerActivity"
-            android:theme="@style/PlacePickerTheme"/>
+            android:theme="@style/PlacePickerStyle"/>
         <activity
             android:name=".View.ConfigurationActivity"
             android:label="@string/phse_3" >
