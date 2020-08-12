@@ -121,6 +121,7 @@
             <TextView
                 android:gravity="center"
                 android:text="2"
+                android:id="@+id/lbl2"
                 android:textColor="@color/colorGray"
                 android:background="@drawable/bg_circle"
                 android:layout_width="36dp"
@@ -146,7 +147,7 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/idCardView1"
+                    android:id="@+id/contactCardView"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:clickable="true"
                     android:layout_width="match_parent"
@@ -168,6 +169,7 @@
                         <TextView
                             android:textColor="@color/colorGray"
                             android:text="@string/phse_2"
+                            android:id="@+id/title2"
                             android:textStyle="bold"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -213,6 +215,7 @@
             <TextView
                 android:gravity="center"
                 android:text="3"
+                android:id="@+id/lbl3"
                 android:textColor="@color/colorGray"
                 android:background="@drawable/bg_circle"
                 android:layout_width="36dp"
@@ -238,7 +241,7 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/idCardView2"
+                    android:id="@+id/settingCardView"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:clickable="true"
                     android:layout_width="match_parent"
@@ -261,6 +264,7 @@
                             android:textColor="@color/colorGray"
                             android:text="@string/phse_3"
                             android:textStyle="bold"
+                            android:id="@+id/title3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
                         <com.codesgood.views.JustifiedTextView

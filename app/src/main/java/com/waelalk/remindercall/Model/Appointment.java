@@ -14,12 +14,15 @@ public class Appointment {
     private String time;
     private boolean is_periodic;
     private boolean is_run;
-    private Point geoCoordinates;
+    private GeoCoordinates geoCoordinates;
     private String message_text;
     private List<Contact_Info> contact_infoList;
 
 
-    public Appointment() {
+    public Appointment(String time, boolean is_periodic) {
+        this.time = time;
+        this.geoCoordinates=null;
+        this.is_periodic = is_periodic;
         this.contact_infoList = new ArrayList<>();
     }
 
@@ -47,11 +50,11 @@ public class Appointment {
         this.is_run = is_run;
     }
 
-    public Point getGeoCoordinates() {
+    public GeoCoordinates getGeoCoordinates() {
         return geoCoordinates;
     }
 
-    public void setGeoCoordinates(Point geoCoordinates) {
+    public void setGeoCoordinates(GeoCoordinates geoCoordinates) {
         this.geoCoordinates = geoCoordinates;
     }
 

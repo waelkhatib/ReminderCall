@@ -21,7 +21,7 @@ public class Settings {
         return !getAppointments().isEmpty();
     }
     public boolean isSecondPhaseFinished(){
-        boolean finish=true;
+        boolean finish=isFirstPhaseFinished();
         for(Appointment appointment:getAppointments()){
             if(appointment.getContact_infoList().isEmpty()){
                 finish=false;

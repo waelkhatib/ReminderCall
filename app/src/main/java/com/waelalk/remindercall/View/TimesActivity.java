@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Point;
+import android.graphics.PointF;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +43,8 @@ import com.sucho.placepicker.MapType;
 import com.sucho.placepicker.PlacePicker;
 import com.waelalk.remindercall.Adapter.TimeRecycleViewAdapter;
 import com.waelalk.remindercall.Helper.Application;
+import com.waelalk.remindercall.Model.Appointment;
+import com.waelalk.remindercall.Model.GeoCoordinates;
 import com.waelalk.remindercall.R;
 
 import java.text.SimpleDateFormat;
@@ -66,9 +70,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         LocationListener {
 
     TimeRecycleViewAdapter adapter;
-
-    public final static int PLACE_PICKER_REQUEST = 0x3;
-
+    private int adapterPosition;
     private GoogleApiClient googleApiClient;
     private final static int REQUEST_CHECK_SETTINGS_GPS=0x1;
     private final static int REQUEST_ID_MULTIPLE_PERMISSIONS=0x2;
@@ -81,6 +83,10 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
         setUpGClient();
+    }
+
+    public void setAdapterPosition(int adapterPosition) {
+        this.adapterPosition = adapterPosition;
     }
 
     private synchronized void setUpGClient() {
@@ -112,48 +118,45 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         return super.onOptionsItemSelected(item);
     }
     private void initViews() {
-        ArrayList<String> times = new ArrayList<>();
-        /*times.add("12:34");
-        times.add("03:56");
-        times.add("14-06-2019 11:05");
-        times.add("16-11-2019 10:00");
-        times.add("14:20");*/
-
-        // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.timeRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TimeRecycleViewAdapter(this, times);
+        adapter = new TimeRecycleViewAdapter(this, Application.getSystemSetting().getAppointments());
         recyclerView.setAdapter(adapter);
         Button save_btn=findViewById(R.id.save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(TimesActivity.this).setTitle(R.string.save_chnge_lbl)
-                        .setMessage(R.string.save_chnge_question)
+                if(Application.getSystemSetting().isFirstPhaseFinished()) {
+                    AlertDialog dialog = new AlertDialog.Builder(TimesActivity.this).setTitle(R.string.save_chnge_lbl)
+                            .setMessage(R.string.save_chnge_question)
 
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                            }
-                        })
+                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                            // The dialog is automatically dismissed when a dialog button is clicked.
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Application.SaveSharedPrefence(TimesActivity.this);
+                                }
+                            })
 
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(android.R.string.no, null)
 
-                        .show();
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor( getResources(). getColor( R.color.colorAccent));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources(). getColor( R.color.colorAccent));
+                            .show();
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                }else
+                    Application.makeSimpleDialog(TimesActivity.this,R.string.warning,R.string.please_enter_one_time_at_the_list);
             }
         });
         Button next_btn=findViewById(R.id.next_btn);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(TimesActivity.this,ContactsActivity.class);
-                intent.putStringArrayListExtra("times",(ArrayList<String>) adapter.getData());
-                startActivity(intent);
+                if(Application.getSystemSetting().isFirstPhaseFinished()) {
+                    Intent intent = new Intent(TimesActivity.this, ContactsActivity.class);
+                    startActivity(intent);
+                }else
+                    Application.makeSimpleDialog(TimesActivity.this,R.string.warning,R.string.please_enter_one_time_at_the_list);
             }
         });
 
@@ -167,7 +170,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                         @Override
                         public void onPositiveButtonClick(Date date) {
                             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.ENGLISH);
-                            adapter.getData().add(format.format(date));
+                            adapter.getData().add(new Appointment(format.format(date),false));
                             adapter.notifyDataSetChanged();
                             v.setClickable(true);
                             // Date is get on positive button click
@@ -194,7 +197,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         v.setClickable(true);
-                        adapter.getData().add("" + selectedHour + ":" + selectedMinute);
+                        adapter.getData().add(new Appointment("" + selectedHour + ":" + selectedMinute,true));
                         adapter.notifyDataSetChanged();
                     }
 
@@ -221,51 +224,14 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                 }
                 break;
             case  Constants.PLACE_PICKER_REQUEST:
-/*
-
                 if (resultCode == Activity.RESULT_OK && data != null) {
-                    Log.d("RESULT****", "OK");
-
-                        double latitude = data.getDoubleExtra(LATITUDE, 0.0);
-                        Log.d("LATITUDE****", latitude+"");
-                        double longitude = data.getDoubleExtra(LONGITUDE, 0.0);
-                        Log.d("LONGITUDE****", longitude+"");
-                        String address = data.getStringExtra(LOCATION_ADDRESS);
-                        Log.d("ADDRESS****", address);
-                /*val postalcode = data.getStringExtra(ZIPCODE)
-                Log.d("POSTALCODE****", postalcode.toString())
-                val bundle = data.getBundleExtra(TRANSITION_BUNDLE)
-                Log.d("BUNDLE TEXT****", bundle.getString("test"))
-                val fullAddress = data.getParcelableExtra<Address>(ADDRESS)
-                if (fullAddress != null) {
-                    Log.d("FULL ADDRESS****", fullAddress.toString())
+                    AddressData addressData = data.getParcelableExtra(Constants.ADDRESS_INTENT);
+                    adapter.getData().get(adapterPosition).setGeoCoordinates(new GeoCoordinates(addressData.getLatitude(),addressData.getLongitude()));
+                    adapter.notifyDataSetChanged();
                 }
-                val timeZoneId = data.getStringExtra(TIME_ZONE_ID)
-                if (timeZoneId != null) {
-                    Log.d("TIME ZONE ID****", timeZoneId)
-                }
-                val timeZoneDisplayName = data.getStringExtra(TIME_ZONE_DISPLAY_NAME);
-                if (timeZoneDisplayName != null) {
-                    Log.d("TIME ZONE NAME****", timeZoneDisplayName)
-                }
-            } else if (requestCode == 2) {
-                val latitude = data.getDoubleExtra(LATITUDE, 0.0)
-                Log.d("LATITUDE****", latitude.toString())
-                val longitude = data.getDoubleExtra(LONGITUDE, 0.0)
-                Log.d("LONGITUDE****", longitude.toString())
-                val address = data.getStringExtra(LOCATION_ADDRESS)
-                Log.d("ADDRESS****", address.toString())
-                val lekuPoi = data.getParcelableExtra<LekuPoi>(LEKU_POI)
-                        Log.d("LekuPoi****", lekuPoi.toString())
-            */
-              if(resultCode == Activity.RESULT_OK){
-                  if (resultCode == Activity.RESULT_OK && data != null) {
-                      AddressData addressData = data.getParcelableExtra(Constants.ADDRESS_INTENT);
-                  }
-              }else
-                if (resultCode == Activity.RESULT_CANCELED) {
-                    Log.d("RESULT****", "CANCELLED");
-                }
+         else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
                 break;
         }
     }
@@ -349,8 +315,9 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                                    //     PingPlacePicker.IntentBuilder builder = new PingPlacePicker.IntentBuilder();
                                      //   builder.setAndroidApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
                                        //         .setMapsApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk");
+                                        GeoCoordinates geoCoordinates=adapter.getData().get(adapterPosition).getGeoCoordinates();
                                         PlacePicker.IntentBuilder builder=new PlacePicker.IntentBuilder()
-                                                .setLatLong(33.5138, 36.2765)  // Initial Latitude and Longitude the Map will load into
+                                                .setLatLong(geoCoordinates!=null?geoCoordinates.getLatitude():33.5138, geoCoordinates!=null?geoCoordinates.getLongitude():36.2765)  // Initial Latitude and Longitude the Map will load into
                                                 .showLatLong(true)  // Show Coordinates in the Activity
                                                 .setMapZoom(12.0f)  // Map Zoom Level. Default: 14.0
                                                 .setAddressRequired(false) // Set If return only Coordinates if cannot fetch Address for the coordinates. Default: True

@@ -1,6 +1,7 @@
 package com.waelalk.remindercall.Adapter;
 
 import android.app.AlertDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -8,25 +9,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
+import com.kunzisoft.switchdatetime.SwitchDateTimeDialogFragment;
+import com.waelalk.remindercall.Helper.Application;
+import com.waelalk.remindercall.Model.Appointment;
 import com.waelalk.remindercall.R;
 import com.waelalk.remindercall.View.TimesActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.google.android.gms.location.places.ui.PlacePicker;
 
 public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleViewAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private List<Appointment> mData;
     private LayoutInflater mInflater;
     private Context context;
 
 
     // data is passed into the constructor
-    public TimeRecycleViewAdapter(Context context, List<String> data) {
+    public TimeRecycleViewAdapter(Context context, List<Appointment> data) {
         this.context=context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
@@ -42,8 +53,47 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        String time = mData.get(position).getTime();
+        holder.myTextView.setText(time);
+        holder.location.setText(mData.get(position).getGeoCoordinates()!=null?context.getString(R.string.location_selected):"");
+        holder.editItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                v.setClickable(false);
+                Appointment appointment=mData.get(position);
+                Calendar calendar;
+                try {
+                    calendar=appointment.getCalendar();
+                } catch (ParseException e) {
+                    calendar=Calendar.getInstance();
+                }
+                if(appointment.isIs_periodic()){
+                    Application.showTimePickerDialog(context,calendar , new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                          mData.get(position).setTime("" + hourOfDay + ":" + minute);
+                          v.setClickable(true);
+                          notifyDataSetChanged();
+                        }
+                    },v);
+                }else {
+                    Application.showSwitchDateTimeDialogFragment(context,(AppCompatActivity)context , calendar, new SwitchDateTimeDialogFragment.OnButtonClickListener() {
+                        @Override
+                        public void onPositiveButtonClick(Date date) {
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm",Locale.ENGLISH);
+                            mData.get(position).setTime(format.format(date));
+                            v.setClickable(true);
+                            notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onNegativeButtonClick(Date date) {
+                         v.setClickable(true);
+                        }
+                    });
+                }
+            }
+        });
         holder.deleteItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,35 +121,8 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
         holder.addLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*Intent locationPickerIntent =new LocationPickerActivity.Builder()
-                      .withGeolocApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk")
-                      .withSearchZone("es_ES")
-                      .withGooglePlacesEnabled()
-                      .build(context);*/
-                      //  .withLocation(41.4036299, 2.1743558)
-
-                        //.withSearchZone(new SearchZoneRect(LatLng(26.525467, -18.910366), LatLng(43.906271, 5.394197)))
-
-                       /* .shouldReturnOkOnBackPressed()
-                        .withStreetHidden()
-                        .withCityHidden()
-                        .withZipCodeHidden()
-
-                        .withSatelliteViewHidden()*/
-
-                //        .withGoogleTimeZoneEnabled()
-              //          .withVoiceSearchHidden()
-              //          .withUnnamedRoadHidden()
-                ((TimesActivity)context).checkPermissions();
-                /*locationPickerIntent.putExtra(LocationPickerActivity.LOCATION_SERVICE, true);
-
-                ((Activity) context).startActivityForResult(locationPickerIntent, TimesActivity.PLACE_PICKER_REQUEST);*/
-  /*              PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-                try {
-                    ((Activity) context). startActivityForResult(builder.build(((Activity) context)), TimesActivity.PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
-                }*/
+              ((TimesActivity)context).setAdapterPosition(position);
+              ((TimesActivity)context).checkPermissions();
             }
         });
     }
@@ -114,25 +137,29 @@ public class TimeRecycleViewAdapter extends RecyclerView.Adapter<TimeRecycleView
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder  {
         TextView myTextView;
+        TextView location;
         ImageButton deleteItem;
+        ImageButton editItem;
         ImageButton addLocation;
 
         ViewHolder(View itemView) {
             super(itemView);
             myTextView = itemView.findViewById(R.id.timeVal);
             deleteItem=itemView.findViewById(R.id.dltItem);
+            editItem=itemView.findViewById(R.id.editItem);
             addLocation=itemView.findViewById(R.id.addLocation);
+            location=itemView.findViewById(R.id.location);
         }
 
 
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    Appointment getItem(int id) {
         return mData.get(id);
     }
 
-    public List<String> getData() {
+    public List<Appointment> getData() {
         return mData;
     }
 }
