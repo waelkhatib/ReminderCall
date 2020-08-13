@@ -31,7 +31,7 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
     private static final int LAYOUT_ADD = 1;
     private static final int LAYOUT_VIEW = 2;
     private List<T> mData;
-    private List<String> selected_contact=new ArrayList<>();
+    private List<T> selected_contacts;
     private LayoutInflater mInflater;
     private Context context;
     private SearchResultListener mSearchResultListener;
@@ -43,10 +43,11 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
 
 
     // data is passed into the constructor
-    public ContactModelAdapter(Context context, List<T> data) {
+    public ContactModelAdapter(Context context, List<T> data,List<T> selectedItems) {
         this.context = context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
+        this.selected_contacts=selectedItems;
     }
 
     @Override
@@ -99,20 +100,23 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
                                     .show();
                         }else {
                             mData.add(1,(T)new Contact_Info(text,text));
+                            ((ViewHolderAdd)holder).cont_val.setFocusable(false);
                             ((ViewHolderAdd)holder).cont_val.setText("");
+
                             notifyDataSetChanged();
                         }
                 }
             });
         }else {
+            ((ViewHolderShow)holder).checkBox.setChecked(selected_contacts.contains(mData.get(position)));
             ((ViewHolderShow)holder).textView.setText(((Contact_Info)mData.get(position)).getName());
             ((ViewHolderShow)holder).checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
-                        selected_contact.add(((Contact_Info)mData.get(position)).getName());
+                        selected_contacts.add((mData.get(position)));
                     }else {
-                        selected_contact.remove(((Contact_Info)mData.get(position)).getName());
+                        selected_contacts.remove((mData.get(position)));
                     }
                 }
             });
@@ -120,8 +124,8 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
         }
     }
 
-    public String getSelectedItems(){
-        return TextUtils.join(",",selected_contact);
+    public List<T> getSelectedItems(){
+        return selected_contacts;
     }
     // total number of rows
     @Override

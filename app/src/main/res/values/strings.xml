@@ -51,4 +51,6 @@
     <string name="warning">Warning</string>
     <string name="please_enter_one_time_at_the_list">Please enter one time at the least</string>
     <string name="location_selected">Location selected</string>
+    <string name="view_message">View message</string>
+    <string name="Please_select_contact_list_for_all_your_times">Please select contact list for all your times</string>
 </resources>

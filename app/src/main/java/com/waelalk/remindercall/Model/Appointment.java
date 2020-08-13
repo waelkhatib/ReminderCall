@@ -24,6 +24,8 @@ public class Appointment {
         this.geoCoordinates=null;
         this.is_periodic = is_periodic;
         this.contact_infoList = new ArrayList<>();
+        this.message_text="";
+        this.is_run=false;
     }
 
     public String getTime() {

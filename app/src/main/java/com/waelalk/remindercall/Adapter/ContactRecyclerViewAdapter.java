@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,7 +20,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.paris.Paris;
 import com.waelalk.remindercall.Helper.Application;
+import com.waelalk.remindercall.Model.Appointment;
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 import com.waelalk.remindercall.View.ContactSearchDialogCompat;
@@ -34,13 +37,13 @@ import ir.mirrajabi.searchdialog.core.SearchResultListener;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
 
-    private List<String> mData;
+    private List<Appointment> mData;
     private LayoutInflater mInflater;
     private Context context;
 
 
     // data is passed into the constructor
-    public ContactRecyclerViewAdapter(Context context, List<String> data) {
+    public ContactRecyclerViewAdapter(Context context, List<Appointment> data) {
         this.context=context;
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
@@ -52,7 +55,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         View view = mInflater.inflate(R.layout.time_row, parent, false);
         return new ViewHolder(view);
     }
-    private PopupWindow initiatePopupWindow(View pop) {
+    private PopupWindow initiatePopupWindow(View pop,int position) {
 
         try {
 
@@ -76,6 +79,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
                                     // Continue with delete operation
+                                    mData.get(position).getContact_infoList().clear();
+                                    notifyDataSetChanged();
                                 }
                             })
 
@@ -90,6 +95,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
 
             final TextView set_msg = (TextView) layout.findViewById(R.id.set_msg);
+            set_msg.setText(mData.get(position).getMessage_text().equals("")?R.string.set_message:R.string.view_message);
             set_msg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -97,6 +103,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
 
 // Set up the input
                     View viewInflated = LayoutInflater.from(context).inflate(R.layout.input_dialog, null);
+                    EditText input=viewInflated.findViewById(R.id.msgText);
+                    input.setText(mData.get(position).getMessage_text());
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                     AlertDialog dialog = new AlertDialog.Builder(context)
 
@@ -106,7 +114,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                    //        m_Text = input.getText().toString();
+                            mData.get(position).setMessage_text( input.getText().toString().trim());
                         }
                     }).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         @Override
@@ -142,50 +150,38 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        String animal = mData.get(position);
-        holder.myTextView.setText(animal);
+        String time = mData.get(position).getTime();
+        holder.myTextView.setText(time);
+        String contacts_name=getContactNamesOnly(mData.get(position).getContact_infoList());
+        if(contacts_name.length()>25){
+            contacts_name=contacts_name.substring(0,25)+"...";
+        }
+        holder.spinner.setText (contacts_name);
+        Paris.style(holder.spinner).apply(contacts_name.length()==0?R.style.SpinnerTheme:R.style.EditTextTheme);
         holder.popup_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               initiatePopupWindow(v);
+               initiatePopupWindow(v,position);
             }
         });
-    /*    holder.deleteItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(context).setTitle("Reset contact list")
-                        .setMessage("Are you sure you want to reset contact list for this time?")
 
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                            }
-                        })
-
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
-
-                        .show();
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(context. getResources(). getColor( R.color.colorAccent));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(context.getResources(). getColor( R.color.colorAccent));
-            }
-        });*/
         holder.spinner.setFocusable(false);
         holder.spinner.setFocusableInTouchMode(false);
         //holder.spinner.setFocusedByDefault(false);
         holder.spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                view.setOnClickListener(null);
+                final View.OnClickListener event=this;
 //                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
-                ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<>(context, context.getString(R.string.search),
-                        context.getString(R.string.what_look_for), null, createSampleContacts(),new SearchResultListener<Contact_Info>() {
+                ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<Contact_Info>(context, context.getString(R.string.search),
+                        context.getString(R.string.what_look_for), null, createSampleContacts(),mData.get(position).getContact_infoList(),new SearchResultListener<Contact_Info>() {
                     @Override
                     public void onSelected(
                             BaseSearchDialogCompat dialog,
                             Contact_Info item, int position
                     ) {
+                        view.setOnClickListener(event);
                         dialog.dismiss();
                     }
                 });
@@ -194,12 +190,29 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 dialog.getPositiveButton().setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((EditText)view).setText (((ContactModelAdapter)(dialog.getAdapter())).getSelectedItems());
+                        mData.get(position).setContact_infoList(((ContactModelAdapter)(dialog.getAdapter())).getSelectedItems());
+
                         dialog.dismiss();
+                        notifyDataSetChanged();
+                    }
+                });
+                dialog.getNegativeButton().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        view.setOnClickListener(event);
+                       dialog. dismiss();
                     }
                 });
             }
         });
+    }
+
+    private String getContactNamesOnly(List<Contact_Info> contact_infoList) {
+        List<String> names=new ArrayList<>();
+        for(Contact_Info contact_info:contact_infoList){
+            names.add(contact_info.getName());
+        }
+        return names.isEmpty()?"":TextUtils.join(",",names);
     }
 
     private ArrayList<Contact_Info> createSampleContacts() {
@@ -235,7 +248,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     }
 
     // convenience method for getting data at click position
-    String getItem(int id) {
+    Appointment getItem(int id) {
         return mData.get(id);
     }
 

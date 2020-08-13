@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.waelalk.remindercall.Adapter.ContactRecyclerViewAdapter;
+import com.waelalk.remindercall.Helper.Application;
+import com.waelalk.remindercall.Model.Appointment;
 import com.waelalk.remindercall.R;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.Map;
 
 
 public class ContactsActivity extends AppCompatActivity {
-    public static final int PICK_CONTACT = 99;
+    //public static final int PICK_CONTACT = 99;
     ContactRecyclerViewAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,50 +58,46 @@ public class ContactsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     private void initViews() {
-        List<String> times =getIntent().getStringArrayListExtra("times");
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.contactRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ContactRecyclerViewAdapter(this, times);
+        adapter = new ContactRecyclerViewAdapter(this, Application.getSystemSetting().getAppointments());
         recyclerView.setAdapter(adapter);
         Button save_btn=findViewById(R.id.save_btn);
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialog=  new AlertDialog.Builder(ContactsActivity.this).setTitle(R.string.save_chnge_lbl)
-                        .setMessage(R.string.save_chnge_question)
+                if(Application.getSystemSetting().isSecondPhaseFinished()) {
+                    AlertDialog dialog = new AlertDialog.Builder(ContactsActivity.this).setTitle(R.string.save_chnge_lbl)
+                            .setMessage(R.string.save_chnge_question)
 
-                        // Specifying a listener allows you to take an action before dismissing the dialog.
-                        // The dialog is automatically dismissed when a dialog button is clicked.
-                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Continue with delete operation
-                            }
-                        })
+                            // Specifying a listener allows you to take an action before dismissing the dialog.
+                            // The dialog is automatically dismissed when a dialog button is clicked.
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Application.SaveSharedPrefence(ContactsActivity.this);
+                                }
+                            })
 
-                        // A null listener allows the button to dismiss the dialog and take no further action.
-                        .setNegativeButton(android.R.string.no, null)
+                            // A null listener allows the button to dismiss the dialog and take no further action.
+                            .setNegativeButton(android.R.string.no, null)
 
-                        .show();
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor( getResources(). getColor( R.color.colorAccent));
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources(). getColor( R.color.colorAccent));
-
-         /*Intent intent=new Intent(TimesActivity.this, ContactPickerActivity.class)
-                 .putExtra(ContactPickerActivity.EXTRA_THEME,R.style.ContactPicker)
-                 .putExtra(ContactPickerActivity.EXTRA_CONTACT_BADGE_TYPE, ContactPictureType.ROUND.name())
-                 .putExtra(ContactPickerActivity.EXTRA_SHOW_CHECK_ALL, true)
-                 .putExtra(ContactPickerActivity.EXTRA_CONTACT_DESCRIPTION, ContactDescription.ADDRESS.name())
-                 .putExtra(ContactPickerActivity.EXTRA_CONTACT_DESCRIPTION_TYPE, ContactsContract.CommonDataKinds.Email.TYPE_WORK)
-                 .putExtra(ContactPickerActivity.EXTRA_CONTACT_SORT_ORDER, ContactSortOrder.AUTOMATIC.name());
-                startActivityForResult(intent, PICK_CONTACT);*/
+                            .show();
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
+                }else
+                    Application.makeSimpleDialog(ContactsActivity.this,R.string.warning,R.string.Please_select_contact_list_for_all_your_times);
             }
         });
         Button next_btn=findViewById(R.id.next_btn);
         next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ContactsActivity.this,ConfigurationActivity.class));
+                if(Application.getSystemSetting().isSecondPhaseFinished())
+                    startActivity(new Intent(ContactsActivity.this,ConfigurationActivity.class));
+                else
+                    Application.makeSimpleDialog(ContactsActivity.this,R.string.warning,R.string.Please_select_contact_list_for_all_your_times);
             }
         });
 

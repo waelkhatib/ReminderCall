@@ -14,6 +14,7 @@ import com.waelalk.remindercall.Adapter.ContactModelAdapter;
 import com.waelalk.remindercall.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
 import ir.mirrajabi.searchdialog.core.FilterResultListener;
@@ -25,19 +26,27 @@ public class ContactSearchDialogCompat<T extends Searchable> extends BaseSearchD
     private String mSearchHint;
     private SearchResultListener<T> mSearchResultListener;
     private Context mContext;
+    private List<T> selectedItems;
 
     public View getPositiveButton() {
         return positiveButton;
     }
 
     private View positiveButton;
+    private View NegativeButton;
+
+    public View getNegativeButton() {
+        return NegativeButton;
+    }
 
     public ContactSearchDialogCompat(
             Context context, String title, String searchHint,
             @Nullable Filter filter, ArrayList<T> items,
+            List<T> selectedItems,
             SearchResultListener<T> searchResultListener
     ) {
         super(context, items, filter, null, null);
+        this.selectedItems=selectedItems;
         init(context, title, searchHint, searchResultListener);
     }
 
@@ -69,20 +78,15 @@ public class ContactSearchDialogCompat<T extends Searchable> extends BaseSearchD
                     }
                 });*/
        positiveButton=view.findViewById(R.id.ok);
+       NegativeButton=  view.findViewById(R.id.cancel);
 //       view.findViewById(R.id.ok).setOnClickListener(new View.OnClickListener() {
 //           @Override
 //           public void onClick(View v) {
 //               Toast.makeText(mContext,"Ok",Toast.LENGTH_SHORT).show();
 //           }
 //       });
-        view.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
         final ContactModelAdapter adapter = new ContactModelAdapter<>(getContext(),
-                getItems()
+                getItems(),selectedItems
         );
         adapter.setSearchResultListener(mSearchResultListener);
         adapter.setSearchDialog(this);

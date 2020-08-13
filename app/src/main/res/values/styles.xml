@@ -14,6 +14,9 @@
     <style name="SpinnerTheme" parent="android:Widget.Spinner">
         <item name="android:background">@drawable/edittext_bg</item>
     </style>
+        <style name="EditTextTheme" parent="android:Widget.Spinner">
+        <item name="android:background">@drawable/edittext_norm</item>
+    </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>

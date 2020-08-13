@@ -49,4 +49,5 @@
     <string name="this_phase_has_not_activate_yet">This phase has not activated yet</string>
     <string name="warning">Warning</string>
     <string name="please_enter_one_time_at_the_list">Please enter one time at the least</string>
+    <string name="Please_select_contact_list_for_all_your_times">Please select contact list for all your times</string>
 </resources>

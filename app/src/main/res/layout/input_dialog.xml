@@ -23,6 +23,7 @@
         android:background="@drawable/borders"
         android:hint="@string/enter_message"
         android:inputType="textMultiLine"
+        android:id="@+id/msgText"
         android:lines="3"
         android:padding="8dp"
         android:gravity="top"
