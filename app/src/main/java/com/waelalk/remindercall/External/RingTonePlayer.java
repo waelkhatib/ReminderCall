@@ -84,7 +84,19 @@ public class RingTonePlayer {
             });
         }else {
             mMediaPlayer=new MediaPlayer();
-
+            mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                    stopped = true;
+                    ((ConfigurationActivity)mContext).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((ConfigurationActivity)mContext).changeImageBtn();
+                        }
+                    });
+                }
+            });
             mMediaPlayer.setDataSource(mContext, uri);
             mMediaPlayer.prepareAsync();
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -95,7 +107,6 @@ public class RingTonePlayer {
                         @Override
                         public void run() {
                             try {
-                                if ((double) mp.getCurrentPosition() / (double) mp.getDuration() < 0.0004) {
                                     Log.d("%%%2", "-p" + mp.getCurrentPosition());
                                     mp.stop();
                                     mp.release();
@@ -106,7 +117,7 @@ public class RingTonePlayer {
                                             ((ConfigurationActivity)mContext).changeImageBtn();
                                         }
                                     });
-                                }
+
                             }catch (Exception e){
                                 e.printStackTrace();
                             }

@@ -9,6 +9,8 @@ import android.net.Uri;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatCheckBox;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -30,20 +32,24 @@ public class ConfigurationActivity extends AppCompatActivity {
 private Uri defaultRingtoneUri;
 private Ringtone ringtone;
 private ImageButton play_btn;
+private EditText time_tolerance_min;
+private EditText spatial_tolerance_m;
+private EditText spinner;
+private AppCompatCheckBox audio_alarm;
+private AppCompatCheckBox sms_message;
+
 private final RingTonePlayer player=new RingTonePlayer(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        EditText spinner=findViewById(R.id.spinner);
-
-
-        defaultRingtoneUri = Uri.parse(Application.getSystemSetting().getRingtoneURI());
-
-        ringtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
-
-        spinner.setText(ringtone.getTitle(this));
+        findViewById(R.id.mainView).requestFocus();
+        time_tolerance_min=findViewById(R.id.time_tolerance_min);
+        spatial_tolerance_m=findViewById(R.id.spatial_tolerance_m);
+        spinner=findViewById(R.id.spinner);
+        audio_alarm=findViewById(R.id.audio_alarm);
+        sms_message=findViewById(R.id.sms_message);
         spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,8 +93,8 @@ private final RingTonePlayer player=new RingTonePlayer(this);
                             @Override
                             public void OnRingtoneSelected(@NonNull String ringtoneName, Uri ringtoneUri) {
                                 //Do someting with selected uri...
-                                defaultRingtoneUri=ringtoneUri;
-                                Application.getSystemSetting().setRingtoneURI(defaultRingtoneUri.toString());
+                                Application.getSystemSetting().setRingtoneURI(ringtoneUri.toString());
+                                initViews();
 
                             }
                         });
@@ -103,6 +109,7 @@ private final RingTonePlayer player=new RingTonePlayer(this);
                 ringtonePickerBuilder.show();
             }
         });
+
         Button run_btn=findViewById(R.id.run_btn);
         run_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +152,17 @@ private final RingTonePlayer player=new RingTonePlayer(this);
                 }
             }
         });
+        initViews();
+    }
+
+    private void initViews() {
+        defaultRingtoneUri = Uri.parse(Application.getSystemSetting().getRingtoneURI());
+        ringtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
+        spinner.setText(ringtone.getTitle(this));
+        time_tolerance_min.setText(""+Application.getSystemSetting().getTimeTolerance());
+        spatial_tolerance_m.setText(""+Application.getSystemSetting().getSpatialTolerance());
+        audio_alarm.setChecked(Application.getSystemSetting().isAudioAlarmEnabled());
+        sms_message.setChecked(Application.getSystemSetting().isAudioAlarmEnabled());
     }
 
     public void changeImageBtn() {

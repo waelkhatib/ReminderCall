@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -171,38 +172,52 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         holder.spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((ContactsActivity)context).getProgressBar().setVisibility(View.VISIBLE);
                 view.setOnClickListener(null);
                 final View.OnClickListener event=this;
-//                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
-                ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<Contact_Info>(context, context.getString(R.string.search),
-                        context.getString(R.string.what_look_for), null, createSampleContacts(mData.get(position).getContact_infoList()),mData.get(position).getContact_infoList(),new SearchResultListener<Contact_Info>() {
+                ((ContactsActivity)context).getProgressBar().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                     @Override
-                    public void onSelected(
-                            BaseSearchDialogCompat dialog,
-                            Contact_Info item, int position
-                    ) {
-                        view.setOnClickListener(event);
-                        dialog.dismiss();
-                    }
-                });
+                    public void onGlobalLayout() {
+                        if(((ContactsActivity) context).getProgressBar().getVisibility()==View.GONE){
+                            ((ContactsActivity)context).getProgressBar().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            //                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
+                            ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<Contact_Info>(context, context.getString(R.string.search),
+                                    context.getString(R.string.what_look_for), null, createSampleContacts(mData.get(position).getContact_infoList()),mData.get(position).getContact_infoList(),new SearchResultListener<Contact_Info>() {
+                                @Override
+                                public void onSelected(
+                                        BaseSearchDialogCompat dialog,
+                                        Contact_Info item, int position
+                                ) {
+                                    view.setOnClickListener(event);
+                                    dialog.dismiss();
+                                }
+                            });
 
-                dialog.show();
-                dialog.getPositiveButton().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mData.get(position).setContact_infoList(((ContactModelAdapter)(dialog.getAdapter())).getSelectedItems());
+                            dialog.show();
+                            dialog.getPositiveButton().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mData.get(position).setContact_infoList(((ContactModelAdapter)(dialog.getAdapter())).getSelectedItems());
 
-                        dialog.dismiss();
-                        notifyDataSetChanged();
+                                    dialog.dismiss();
+                                    notifyDataSetChanged();
+                                }
+                            });
+                            dialog.getNegativeButton().setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    view.setOnClickListener(event);
+                                    dialog. dismiss();
+                                }
+                            });
+                        }
                     }
                 });
-                dialog.getNegativeButton().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        view.setOnClickListener(event);
-                       dialog. dismiss();
-                    }
-                });
+                if(((ContactsActivity)context).getContactList()!=null){
+                    ((ContactsActivity)context).getProgressBar().setVisibility(View.GONE);
+                }
+
+
             }
         });
     }

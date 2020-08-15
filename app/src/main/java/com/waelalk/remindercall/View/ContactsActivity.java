@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.waelalk.remindercall.Adapter.ContactRecyclerViewAdapter;
 import com.waelalk.remindercall.Helper.Application;
@@ -31,7 +32,8 @@ import java.util.Map;
 public class ContactsActivity extends AppCompatActivity {
     //public static final int PICK_CONTACT = 99;
     ContactRecyclerViewAdapter adapter;
-    private ArrayList<Contact_Info> contactList;
+    private ArrayList<Contact_Info> contactList=null;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +73,7 @@ public class ContactsActivity extends AppCompatActivity {
     private void initViews() {
 
         // set up the RecyclerView
+        progressBar=findViewById(R.id.progress_bar);
         RecyclerView recyclerView = findViewById(R.id.contactRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ContactRecyclerViewAdapter(this, Application.getSystemSetting().getAppointments());
@@ -114,10 +117,20 @@ public class ContactsActivity extends AppCompatActivity {
        new Thread(new Runnable() {
            @Override
            public void run() {
-               setContactList(getContacts());
+               setContactList(getContacts());runOnUiThread(new Runnable() {
+                   @Override
+                   public void run() {
+                       progressBar.setVisibility(View.GONE);
+                   }
+               });
            }
        }).start();
     }
+
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
 
     private ArrayList<Contact_Info> getContacts() {
         Map<String,String> contact=new HashMap<>();
