@@ -126,7 +126,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Application.getSystemSetting().isFirstPhaseFinished()) {
+                //if(Application.getSystemSetting().isFirstPhaseFinished()) {
                     AlertDialog dialog = new AlertDialog.Builder(TimesActivity.this).setTitle(R.string.save_chnge_lbl)
                             .setMessage(R.string.save_chnge_question)
 
@@ -144,8 +144,8 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                             .show();
                     dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent));
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent));
-                }else
-                    Application.makeSimpleDialog(TimesActivity.this,R.string.warning,R.string.please_enter_one_time_at_the_list);
+//                }else
+//                    Application.makeSimpleDialog(TimesActivity.this,R.string.warning,R.string.please_enter_one_time_at_the_list);
             }
         });
         Button next_btn=findViewById(R.id.next_btn);

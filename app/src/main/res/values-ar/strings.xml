@@ -45,9 +45,11 @@
     <string name="spatial_tolerance_m">السماحية المكانية (م)</string>
     <string name="temporal_spatial_correlation">الارتباط الزماني المكاني</string>
     <string name="home_page">الصفحة الرئيسية</string>
-    <string name="info">Info</string>
-    <string name="this_phase_has_not_activate_yet">This phase has not activated yet</string>
-    <string name="warning">Warning</string>
-    <string name="please_enter_one_time_at_the_list">Please enter one time at the least</string>
-    <string name="Please_select_contact_list_for_all_your_times">Please select contact list for all your times</string>
+    <string name="this_phase_has_not_activate_yet">لم تفعُّل هذه المرحلة بعد</string>
+    <string name="Please_select_contact_list_for_all_your_times">الرجاء تحديد جهات اتصال لكل المواعيد المدخلة</string>
+    <string name="info">استعلام</string>
+    <string name="warning">تحذير</string>
+    <string name="please_enter_one_time_at_the_list">أدخل موعد واحد على الأقل من فضلك</string>
+    <string name="location_selected">تم اختيار الموقع</string>
+    <string name="view_message">عرض الرسالة</string>
 </resources>

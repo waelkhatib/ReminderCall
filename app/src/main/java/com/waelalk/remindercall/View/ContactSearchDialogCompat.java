@@ -69,6 +69,8 @@ public class ContactSearchDialogCompat<T extends Searchable> extends BaseSearchD
         TextView txtTitle = (TextView) view.findViewById(R.id.txt_title);
         final EditText searchBox = (EditText) view.findViewById(getSearchBoxId());
         txtTitle.setText(mTitle);
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
         searchBox.setHint(mSearchHint);
        /* view.findViewById(ir.mirrajabi.searchdialog.R.id.dummy_background)
                 .setOnClickListener(new View.OnClickListener() {

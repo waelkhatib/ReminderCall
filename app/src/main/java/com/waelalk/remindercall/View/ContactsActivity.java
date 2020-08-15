@@ -19,6 +19,7 @@ import android.widget.Button;
 import com.waelalk.remindercall.Adapter.ContactRecyclerViewAdapter;
 import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.Model.Appointment;
+import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.Map;
 public class ContactsActivity extends AppCompatActivity {
     //public static final int PICK_CONTACT = 99;
     ContactRecyclerViewAdapter adapter;
+    private ArrayList<Contact_Info> contactList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +59,15 @@ public class ContactsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public ArrayList<Contact_Info> getContactList() {
+        return contactList;
+    }
+
+    public void setContactList(ArrayList<Contact_Info> contactList) {
+        this.contactList = contactList;
+    }
+
     private void initViews() {
 
         // set up the RecyclerView
@@ -100,10 +111,15 @@ public class ContactsActivity extends AppCompatActivity {
                     Application.makeSimpleDialog(ContactsActivity.this,R.string.warning,R.string.Please_select_contact_list_for_all_your_times);
             }
         });
-
+       new Thread(new Runnable() {
+           @Override
+           public void run() {
+               setContactList(getContacts());
+           }
+       }).start();
     }
 
-    public Map<String,String> getContactList() {
+    private ArrayList<Contact_Info> getContacts() {
         Map<String,String> contact=new HashMap<>();
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -135,6 +151,11 @@ public class ContactsActivity extends AppCompatActivity {
         if(cur!=null){
             cur.close();
         }
-        return  contact;
+        ArrayList<Contact_Info> contact_infos=new ArrayList<>();
+        contact_infos.add(new Contact_Info("",""));
+        for(Map.Entry<String,String> entry : contact.entrySet()){
+            contact_infos.add(new Contact_Info(entry.getKey(),entry.getValue()));
+        }
+        return contact_infos;
     }
     }

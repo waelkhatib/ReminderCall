@@ -153,8 +153,8 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         String time = mData.get(position).getTime();
         holder.myTextView.setText(time);
         String contacts_name=getContactNamesOnly(mData.get(position).getContact_infoList());
-        if(contacts_name.length()>25){
-            contacts_name=contacts_name.substring(0,25)+"...";
+        if(contacts_name.length()>20){
+            contacts_name=contacts_name.substring(0,20)+"...";
         }
         holder.spinner.setText (contacts_name);
         Paris.style(holder.spinner).apply(contacts_name.length()==0?R.style.SpinnerTheme:R.style.EditTextTheme);
@@ -175,7 +175,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
                 final View.OnClickListener event=this;
 //                Toast.makeText(context,"xz",Toast.LENGTH_SHORT).show();
                 ContactSearchDialogCompat dialog=   new ContactSearchDialogCompat<Contact_Info>(context, context.getString(R.string.search),
-                        context.getString(R.string.what_look_for), null, createSampleContacts(),mData.get(position).getContact_infoList(),new SearchResultListener<Contact_Info>() {
+                        context.getString(R.string.what_look_for), null, createSampleContacts(mData.get(position).getContact_infoList()),mData.get(position).getContact_infoList(),new SearchResultListener<Contact_Info>() {
                     @Override
                     public void onSelected(
                             BaseSearchDialogCompat dialog,
@@ -215,12 +215,13 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
         return names.isEmpty()?"":TextUtils.join(",",names);
     }
 
-    private ArrayList<Contact_Info> createSampleContacts() {
-        ArrayList<Contact_Info> contact_infos=new ArrayList<>();
-        contact_infos.add(new Contact_Info("",""));
-        for(Map.Entry<String,String> entry : ((ContactsActivity)context).getContactList().entrySet()){
-            contact_infos.add(new Contact_Info(entry.getKey(),entry.getValue()));
-        }
+    private ArrayList<Contact_Info> createSampleContacts(List<Contact_Info> current_contacts) {
+        ArrayList<Contact_Info> contact_infos=new ArrayList<Contact_Info> ();
+        ArrayList<Contact_Info> temp=new ArrayList<Contact_Info> ();
+        temp.addAll(current_contacts);
+        contact_infos.addAll(((ContactsActivity)context).getContactList());
+        temp.removeAll(contact_infos);
+        contact_infos.addAll(1,temp);
         return contact_infos;
     }
 
@@ -229,6 +230,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
     public int getItemCount() {
         return mData.size();
     }
+
 
 
     // stores and recycles views as they are scrolled off screen

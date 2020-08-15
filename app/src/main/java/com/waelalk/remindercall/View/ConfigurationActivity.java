@@ -10,6 +10,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,29 +21,39 @@ import android.widget.ImageButton;
 import com.waelalk.remindercall.External.RingTonePlayer;
 import com.waelalk.remindercall.External.RingtonePickerDialog;
 import com.waelalk.remindercall.External.RingtonePickerListener;
+import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.R;
 
 import java.io.IOException;
 
 public class ConfigurationActivity extends AppCompatActivity {
-
-
+private Uri defaultRingtoneUri;
+private Ringtone ringtone;
+private ImageButton play_btn;
+private final RingTonePlayer player=new RingTonePlayer(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_configuration);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         EditText spinner=findViewById(R.id.spinner);
-        spinner.setFocusable(false);
-        spinner.setFocusableInTouchMode(false);
-        final RingTonePlayer player=new RingTonePlayer(this);
-        final Uri defaultRingtoneUri = RingtoneManager.getActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE);
-        Ringtone defaultRingtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
 
-        spinner.setText(defaultRingtone.getTitle(this));
+
+        defaultRingtoneUri = Uri.parse(Application.getSystemSetting().getRingtoneURI());
+
+        ringtone = RingtoneManager.getRingtone(this, defaultRingtoneUri);
+
+        spinner.setText(ringtone.getTitle(this));
         spinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(player.isPlayed()){
+                    try {
+                        player.play(defaultRingtoneUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 RingtonePickerDialog.Builder ringtonePickerBuilder = new RingtonePickerDialog
                         .Builder(ConfigurationActivity.this, getSupportFragmentManager())
 
@@ -52,7 +63,7 @@ public class ConfigurationActivity extends AppCompatActivity {
 
                         //set the currently selected uri, to mark that ringtone as checked by default.
                         //If no ringtone is currently selected, pass null.
-                        .setCurrentRingtoneUri(null)
+                        .setCurrentRingtoneUri(defaultRingtoneUri)
 
                         //Set true to allow allow user to select default ringtone set in phone settings.
                         //        .displayDefaultRingtone(true)
@@ -76,6 +87,9 @@ public class ConfigurationActivity extends AppCompatActivity {
                             @Override
                             public void OnRingtoneSelected(@NonNull String ringtoneName, Uri ringtoneUri) {
                                 //Do someting with selected uri...
+                                defaultRingtoneUri=ringtoneUri;
+                                Application.getSystemSetting().setRingtoneURI(defaultRingtoneUri.toString());
+
                             }
                         });
 
@@ -120,7 +134,7 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton play_btn=findViewById(R.id.play_btn);
+        play_btn=findViewById(R.id.play_btn);
         play_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +146,11 @@ public class ConfigurationActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void changeImageBtn() {
+        play_btn.setImageResource(player.isPlayed()?R.drawable.ic_pause_black_24dp:R.drawable.ic_play_arrow_black_24dp);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

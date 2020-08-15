@@ -1,13 +1,17 @@
 package com.waelalk.remindercall.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tooltip.Tooltip;
+import com.waelalk.remindercall.Helper.Application;
 import com.waelalk.remindercall.Model.Contact_Info;
 import com.waelalk.remindercall.R;
 
@@ -28,8 +33,7 @@ import ir.mirrajabi.searchdialog.core.Searchable;
 
 public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int LAYOUT_ADD = 1;
-    private static final int LAYOUT_VIEW = 2;
+    private static final int LAYOUT_ADD = 0;
     private List<T> mData;
     private List<T> selected_contacts;
     private LayoutInflater mInflater;
@@ -48,15 +52,20 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
         this.mInflater = LayoutInflater.from(context);
         this.mData = data;
         this.selected_contacts=selectedItems;
+
+//        setHasStableIds(true);
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (((Contact_Info)mData.get(position)).getName() == "")
-            return LAYOUT_ADD;
-        else
-            return LAYOUT_VIEW;
+        return position;
     }
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -79,6 +88,16 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if(holder.getItemViewType()== LAYOUT_ADD)
         {
+            ((ViewHolderAdd)holder).cont_val.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                    if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || (actionId == EditorInfo.IME_ACTION_DONE)) {
+                        ((ViewHolderAdd)holder).addItem.performClick();
+                    }
+                    return false;
+                }
+            });
+
             ((ViewHolderAdd)holder).addItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -99,8 +118,12 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
                             tooltip.setText(context.getString(R.string.phone_not_duplicated))
                                     .show();
                         }else {
-                            mData.add(1,(T)new Contact_Info(text,text));
+                            T item=(T)new Contact_Info(text,text);
+                            mData.add(1,item);
+                            selected_contacts.add(item);
+                           Application. hideKeyboard(context,((ViewHolderAdd)holder).cont_val);
                             ((ViewHolderAdd)holder).cont_val.setFocusable(false);
+                            ((ViewHolderAdd)holder).cont_val.setFocusableInTouchMode(true);
                             ((ViewHolderAdd)holder).cont_val.setText("");
 
                             notifyDataSetChanged();
@@ -114,6 +137,7 @@ public class ContactModelAdapter<T extends Searchable> extends RecyclerView.Adap
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked){
+                        if(!selected_contacts.contains((mData.get(position))))
                         selected_contacts.add((mData.get(position)));
                     }else {
                         selected_contacts.remove((mData.get(position)));

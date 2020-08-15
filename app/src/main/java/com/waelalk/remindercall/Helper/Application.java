@@ -1,5 +1,6 @@
 package com.waelalk.remindercall.Helper;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -7,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.google.gson.Gson;
@@ -99,6 +102,11 @@ public class Application extends android.app.Application {
         SharedPreferences.Editor editor= sharedPreferences.edit();
         editor.putString(CONFIG,new Gson().toJson(getSystemSetting()));
         editor.apply();
+    }
+
+    public static void hideKeyboard(Context context,View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
