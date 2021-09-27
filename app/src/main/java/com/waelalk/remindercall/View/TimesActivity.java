@@ -317,7 +317,7 @@ public class TimesActivity extends AppCompatActivity  implements GoogleApiClient
                                        //         .setMapsApiKey("AIzaSyDs2H5xV71lB0URhfinVAQ6U1-83dmG5Fk");
                                         GeoCoordinates geoCoordinates=adapter.getData().get(adapterPosition).getGeoCoordinates();
                                         PlacePicker.IntentBuilder builder=new PlacePicker.IntentBuilder()
-                                                .setLatLong(geoCoordinates!=null?geoCoordinates.getLatitude():33.5138, geoCoordinates!=null?geoCoordinates.getLongitude():36.2765)  // Initial Latitude and Longitude the Map will load into
+                                                .setLatLong(geoCoordinates!=null?geoCoordinates.getLatitude():0, geoCoordinates!=null?geoCoordinates.getLongitude():0)  // Initial Latitude and Longitude the Map will load into
                                                 .showLatLong(true)  // Show Coordinates in the Activity
                                                 .setMapZoom(12.0f)  // Map Zoom Level. Default: 14.0
                                                 .setAddressRequired(false) // Set If return only Coordinates if cannot fetch Address for the coordinates. Default: True

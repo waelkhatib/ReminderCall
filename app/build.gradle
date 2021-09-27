@@ -26,7 +26,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar','*.aar'])
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
 
@@ -47,7 +48,7 @@ dependencies {
     implementation 'com.airbnb.android:paris:1.7.1'
     // PING Place Picke
     //implementation 'com.github.rtchagas:pingplacepicker:1.1.5'
-    implementation 'com.sucho:placepicker:1.1.1'
+    //implementation 'com.sucho:placepicker:1.1.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.material:material:1.1.0'
